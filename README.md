@@ -2,6 +2,8 @@
 Basic guide and script for animating assemblies in PTC Creo using Python, via [creopyson](https://pypi.org/project/creopyson/) and [CREOSON](https://github.com/SimplifiedLogic/creoson/releases).
 Installing [Open CV](https://github.com/opencv/opencv-python) is recommended for streamlined conversion of images to videos
 
+
+## Motivation
 One fundamental problem with creating simple animations in PTC Creo is that there is no option to force a regeneration on each frame. This means that objects with non-rigid geometry, cross-sections, etc. do not update their appearance appropriately.
 
 A simple example of that can be seen here, where a worm gear assembly has been sectioned and animated using Creo's Mechanism tools (notice how the cross-section is not updated correctly as the gears rotate):
@@ -32,13 +34,13 @@ model_name = c.file_get_active()['file']
 print(model_name)
 ```
 
-Note that by default Creo will export images to the current working directory, which can be updated via "creo_cd":
+Note that by default the script will export images to somewhere in User/Documents, which can be updated via "creo_cd":
 Ex: `c.creo_cd('D:/CreoProjects/Pump/animation/')`
 
 ## Example
 For something simple like animating this flexible tube (defined as a sweep in the assembly), we just need to set a relation that adjusts a dimension of interest:
 <img width="1518" height="395" alt="image" src="https://github.com/user-attachments/assets/76b4b564-f6ad-4a84-8869-b8c6f67ac8d7" />
-Here, the dimension is "d21:481", which we can add a relation for and set via a script to any value we want, then regenerate and capture an image:
+Here, the dimension is "d21:481", which we can add a relation for and repeatedly set via a script to any value we want, then regenerate and capture an image:
 
 ```
 import creopyson
@@ -82,3 +84,14 @@ cv2.destroyAllWindows()
 ```
 <img width="800" height="600" alt="animation_9 (1)" src="https://github.com/user-attachments/assets/7b8dbc59-1d45-4a0f-b727-801f19d8c3e8" />
 
+## Example 2: Mechanism Integration
+It's also possible to apply this method to assemblies that use Mechanism constraints, though it requires the use of a reference component/plane/etc.
+
+In this example we want to set the rotation of the gears, but since we can't directly set rotation/translation of a mechanism constraint, we can do the next-best thing and set it to *match* the rotation of a reference plane or object.
+Here a nut is used as our reference point, which uses default constraints including one angle offset, which can be adjusted via relations like before.
+Setting the mechanism constraint to use the nut's plane as its reference for "zero" means that if we rotate the nut and regenerate, then the gear rotates to match:
+<img width="1088" height="824" alt="image" src="https://github.com/user-attachments/assets/45e35a01-1e74-4429-9ab4-e053cfbba8b5" />
+<img width="966" height="498" alt="image" src="https://github.com/user-attachments/assets/4b56aad0-cc98-46ba-9089-5e3fb4aacebc" />
+
+We can then run the same script as before, with updated angle range and the relation to match (`f'd15:129={i}'`):
+<img width="800" height="600" alt="animation_10 (1)" src="https://github.com/user-attachments/assets/a8605005-4746-41c2-97e5-8c5d73a9811a" />
