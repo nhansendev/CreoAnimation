@@ -96,3 +96,7 @@ Setting the mechanism constraint to use the nut's plane as its reference for "ze
 
 We can then run the same script as before, with updated angle range and the relation to match (`f'd15:129={i}'`):
 <img width="800" height="600" alt="animation_10 (1)" src="https://github.com/user-attachments/assets/a8605005-4746-41c2-97e5-8c5d73a9811a" />
+
+Note that in this example there would be no difference between using the scripting method and using the built-in Mechanism animation tools, since we're only rotating **solid bodies** and not showing cross-sections.
+
+The same basic script can be extended to control multiple relations at once (use a list format: ['d1=1', 'd2=2', ...]), allowing complex animations to be created with relative ease.
