@@ -46,6 +46,7 @@ Here, the dimension is "d21:481", which we can add a relation for and repeatedly
 import creopyson
 import cv2
 import os
+import numpy as np # for convenience, but can be replaced with pure python
 
 c = creopyson.Client()
 c.connect()
